@@ -32,10 +32,7 @@ void Socket::Bind(const InetAddress& serv_addr) {
         close(fd_);
         exit(-1);
     }
-    ip_ = serv_addr.ip();
-    port_ = serv_addr.port();
 }
-
 void Socket::Listen(int n) {
     if (listen(fd_, n) < 0) {
         perror("listen() failed\n");
@@ -49,10 +46,5 @@ int Socket::Accept(InetAddress& client_addr) {
     int client_fd = accept4(fd_, (sockaddr*)&peer_addr, &len, SOCK_NONBLOCK);
 
     client_addr.SetAddr(peer_addr);
-    ip_ = client_addr.ip();
-    port_ = client_addr.port();
     return client_fd;
 }
-
-std::string Socket::ip() const { return ip_; }
-uint16_t Socket::port() const { return port_; }

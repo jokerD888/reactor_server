@@ -1,6 +1,4 @@
 #pragma once
-#include <map>
-
 #include "acceptor.h"
 #include "channel.h"
 #include "connection.h"
@@ -10,7 +8,6 @@ class TcpServer {
 private:
     EventLoop loop_;
     Acceptor* acceptor_;
-    std::map<int, Connection*> conns_;
 
 public:
     TcpServer(const std::string& ip, const uint16_t& port);

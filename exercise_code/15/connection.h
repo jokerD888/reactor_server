@@ -19,4 +19,7 @@ public:
     uint16_t port() const;
     Connection(EventLoop* loop, Socket* client_sock);
     ~Connection();
+
+    void CloseCallback();  // TCP连接关闭（断开）的回调函数，供Channel调用
+    void ErrorCallback();  // TCP连接出错的回调函数，供Channel调用
 };

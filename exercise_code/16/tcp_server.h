@@ -18,4 +18,6 @@ public:
     void Start();
 
     void NewConnection(Socket* client_sock);
+    void CloseConnection(Connection* conn);  // 关闭客户端的连接，在Connection类中回调此函数
+    void ErrorConnection(Connection* conn);  // 客户端连接出错，在Connection类中回调此函数
 };

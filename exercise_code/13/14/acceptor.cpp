@@ -25,6 +25,8 @@ void Acceptor::NewConnection() {
     InetAddress client_addr;
     Socket *client_sock = new Socket(serv_sock_->Accept(client_addr));
 
+    printf("accept new connection from %s:%d\n", client_addr.ip(), client_addr.port());
+
     new_connection_callback_(client_sock);
 }
 void Acceptor::SetNewConnectionCallback(std::function<void(Socket *)> cb) { new_connection_callback_ = cb; }

@@ -14,9 +14,6 @@ private:
     Channel* client_channel_;  // Acceptor对应的 Channel，在构造函数中创建
 
 public:
-    int fd() const;
-    std::string ip() const;
-    uint16_t port() const;
     Connection(EventLoop* loop, Socket* client_sock);
     ~Connection();
 };

@@ -21,7 +21,9 @@ private:
     uint32_t events_ = 0;   // fd_需要监听的事件，listenfd和clientfd需要监听EPOLLIN，clientfd还可能需要监听EPOLLOUT
     uint32_t revents_ = 0;  // fd_已发生的事件
 
-    std::function<void()> read_callback_;  // fd_读事件的回调函数
+    std::function<void()> read_callback_;   // fd_读事件的回调函数,如果是acceptor,将回调Acceptor::NewConnection()
+    std::function<void()> close_callback_;  // 关闭fd_的回调函数，将回调Connection::CloseCallback()
+    std::function<void()> error_callback_;  // fd_发生错误的回调函数，将回调Connection::ErrorCallback()
 
 public:
     Channel(EventLoop *ep, int fd) : fd_(fd), ep_(ep) {}
@@ -42,4 +44,6 @@ public:
     void OnMessage();  // 处理对端发过来的消息
     // 设置的回调函数即可能是accept新连接的回调函数，也可能是读消息的回调函数
     inline void SetReadCallback(std::function<void()> cb) { read_callback_ = cb; }
+    inline void SetCloseCallback(std::function<void()> cb) { close_callback_ = cb; }
+    inline void SetErrorCallback(std::function<void()> cb) { error_callback_ = cb; }
 };
