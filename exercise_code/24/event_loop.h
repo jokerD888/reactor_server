@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include <functional>
+#include <memory>
 
 #include "channel.h"
 #include "epoll.h"
@@ -13,7 +14,7 @@ class Channel;
 
 class EventLoop {
 private:
-    Epoll* ep_;
+    std::unique_ptr<Epoll> ep_;
     std::function<void(EventLoop*)> epoll_timeout_cb_;
 
 public:
@@ -21,7 +22,7 @@ public:
     ~EventLoop();
 
     void Run();
-    inline Epoll* GetEp() { return ep_; }
+
     void UpdateChannel(Channel* ch);  // 把channel添加/更新到红黑树上
     void RemoveChannel(Channel* ch);
     inline void SetEpollTimeoutCb(std::function<void(EventLoop*)> cb) { epoll_timeout_cb_ = cb; }

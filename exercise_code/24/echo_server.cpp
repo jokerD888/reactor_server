@@ -29,7 +29,12 @@ void EchoServer::OnMessage(std::shared_ptr<Connection> conn, std::string& messag
     conn->Send(message.data(), message.size());
 }
 void EchoServer::HandleMessage(std::shared_ptr<Connection> conn, std::string& message) {
-    thread_pool_.AddTask(std::bind(&EchoServer::OnMessage, this, conn, message));
+    if (thread_pool_.size() == 0) {
+        // 如果没有工作线程，则直接在IO线程处理消息
+        OnMessage(conn, message);
+    } else {
+        thread_pool_.AddTask(std::bind(&EchoServer::OnMessage, this, conn, message));
+    }
 }
 void EchoServer::HandleSendComplete(std::shared_ptr<Connection> conn) {
     std::cout << "Send complete from " << conn->ip() << ":" << conn->port() << std::endl;

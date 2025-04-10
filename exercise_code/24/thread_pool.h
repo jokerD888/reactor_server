@@ -21,6 +21,7 @@ private:
     std::string thread_type_;
 
 public:
+    size_t size() const { return workers_.size(); }
     ThreadPool(size_t thread_num, const std::string& thread_type);
     void AddTask(std::function<void()> task);
     ~ThreadPool();

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     // TcpServer tcp_server(argv[1], atoi(argv[2]));
     // TcpSever::Start()内调用EventLoop::Run(),而Run()内就是一个死循环，首先调用Epoll::Loop()获取所有新事件，然后遍历这些事件，调用对应的回调函数
     // tcp_server.Start();
-    EchoServer echo_server(argv[1], atoi(argv[2]));
+    EchoServer echo_server(argv[1], atoi(argv[2]), 3, 0);
     echo_server.Start();
 
     return 0;

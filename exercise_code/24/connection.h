@@ -13,7 +13,7 @@ class Connection : public std::enable_shared_from_this<Connection> {
 private:
     EventLoop* loop_;                      // Acceptor 所在的 EventLoop,由构造函数传参
     std::unique_ptr<Socket> client_sock_;  // 服务端用于监听的 Socket，在构造函数中创建
-    Channel* client_channel_;              // Acceptor对应的 Channel，在构造函数中创建
+    std::unique_ptr<Channel> client_channel_;  // Acceptor对应的 Channel，在构造函数中创建
     std::function<void(std::shared_ptr<Connection>)> close_cb_;
     std::function<void(std::shared_ptr<Connection>)> error_cb_;
     std::function<void(std::shared_ptr<Connection>, std::string&)> message_cb_;

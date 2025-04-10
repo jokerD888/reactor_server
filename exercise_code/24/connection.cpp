@@ -1,8 +1,10 @@
 #include "connection.h"
 
 Connection::Connection(EventLoop* loop, std::unique_ptr<Socket> client_sock)
-    : loop_(loop), client_sock_(std::move(client_sock)), is_shutdown_(false) {
-    client_channel_ = new Channel(loop, client_sock_->fd());
+    : loop_(loop),
+      client_sock_(std::move(client_sock)),
+      is_shutdown_(false),
+      client_channel_(new Channel(loop, client_sock_->fd())) {
     client_channel_->SetReadCallback(std::bind(&Connection::OnMessage, this));
     client_channel_->SetCloseCallback(std::bind(&Connection::CloseCallback, this));
     client_channel_->SetErrorCallback(std::bind(&Connection::ErrorCallback, this));
@@ -11,7 +13,7 @@ Connection::Connection(EventLoop* loop, std::unique_ptr<Socket> client_sock)
     client_channel_->EnableReading();
 }
 
-Connection::~Connection() { delete client_channel_; }
+Connection::~Connection() {}
 
 int Connection::fd() const { return client_sock_->fd(); }
 std::string Connection::ip() const { return client_sock_->ip(); }

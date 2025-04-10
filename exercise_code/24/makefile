@@ -7,4 +7,4 @@ tcpepoll:tcpepoll.cpp inet_address.cpp socket.cpp epoll.cpp channel.cpp event_lo
 	g++ -g -o tcpepoll tcpepoll.cpp inet_address.cpp socket.cpp epoll.cpp channel.cpp event_loop.cpp tcp_server.cpp acceptor.cpp connection.cpp buffer.cpp echo_server.cpp thread_pool.cpp
 
 clean:
-	rm -f client tcpepolll
+	rm -f client tcpepolll core.*

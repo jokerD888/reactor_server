@@ -10,11 +10,11 @@
 #include "thread_pool.h"
 class TcpServer {
 private:
-    EventLoop* main_loop_;               // 主事件循环
-    std::vector<EventLoop*> sub_loops_;  // 从属事件循环
-    ThreadPool* thread_pool_;
+    std::unique_ptr<EventLoop> main_loop_;               // 主事件循环
+    std::vector<std::unique_ptr<EventLoop>> sub_loops_;  // 从属事件循环
+    ThreadPool thread_pool_;
     int thread_num_;  // 线程池的大小也即为从事件的个数
-    Acceptor* acceptor_;
+    Acceptor acceptor_;
     std::map<int, std::shared_ptr<Connection>> conns_;
     std::function<void(std::shared_ptr<Connection>)> new_connection_cb_;
     std::function<void(std::shared_ptr<Connection>)> close_connection_cb_;

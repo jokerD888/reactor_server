@@ -2,7 +2,7 @@
 
 EventLoop::EventLoop() : ep_(new Epoll()) {}
 
-EventLoop::~EventLoop() { delete ep_; }
+EventLoop::~EventLoop() {}
 
 void EventLoop::Run() {
     printf("EventLoop::Run() thread is %ld.\n", syscall(SYS_gettid));
