@@ -22,6 +22,16 @@ TcpServer::TcpServer(const std::string& ip, const uint16_t& port, int thread_num
 TcpServer::~TcpServer() {}
 void TcpServer::Start() { main_loop_->Run(); }
 
+void TcpServer::Stop() {
+    main_loop_->Stop();
+    for (auto& x : sub_loops_) {
+        x->Stop();
+    }
+    printf("事件循环已停止\n");
+    thread_pool_.Stop();
+    printf("IO线程已停止\n");
+}
+
 void TcpServer::NewConnection(std::unique_ptr<Socket> client_sock) {
     // 先获取 fd，再转移所有权!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     int client_fd = client_sock->fd();  // 在移动前获取 fd

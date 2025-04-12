@@ -18,7 +18,8 @@ EventLoop::EventLoop(bool main_loop, int time_interval, int time_out)
       timer_channel_(new Channel(this, timer_fd_)),
       is_main_loop_(main_loop),
       time_interval_(time_interval),
-      time_out_(time_out) {
+      time_out_(time_out),
+      stop_(false) {
     wakeup_channel_->SetReadCallback(std::bind(&EventLoop::HandleWakeup, this));
     wakeup_channel_->EnableReading();
     timer_channel_->SetReadCallback(std::bind(&EventLoop::HandleTimerfd, this));
@@ -30,12 +31,16 @@ EventLoop::~EventLoop() {}
 void EventLoop::Run() {
     thread_id_ = syscall(SYS_gettid);
     // printf("EventLoop::Run() thread is %ld.\n", syscall(SYS_gettid));
-    while (true) {
+    while (!stop_) {
         std::vector<Channel*> channels = ep_->Loop(10 * 1000);
         if (channels.empty()) epoll_timeout_cb_(this);
 
         for (auto ch : channels) ch->HandleEvent();
     }
+}
+void EventLoop ::Stop() {
+    stop_ = true;
+    Wakeup();
 }
 void EventLoop::UpdateChannel(Channel* ch) { ep_->UpdateChannel(ch); }
 
